@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>html{color-scheme:light}body{margin:0}</style>
+<title>iMRV</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap">
+<style>
+/* Layout: left-aligned hero over a band of soil strata; orbit meter as the one subject-specific detail */
+:root {
+  --bg: #E8EBDD;
+  --fg: #1E2A20;
+  --muted: #55604F;
+  --accent: #4F6E2C;
+  --line: #C3CAB2;
+  --s1: #D3D8BD;
+  --s2: #B8AD86;
+  --s3: #8E7A57;
+  --s4: #5B4935;
+  --font-display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131A15; --fg: #E3E8D6; --muted: #9AA48D; --accent: #A9C66E; --line: #2A352C;
+    --s1: #1C291E; --s2: #2D3927; --s3: #4A412E; --s4: #6C5539;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131A15; --fg: #E3E8D6; --muted: #9AA48D; --accent: #A9C66E; --line: #2A352C;
+  --s1: #1C291E; --s2: #2D3927; --s3: #4A412E; --s4: #6C5539;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  padding-block: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  min-height: 100%;
+}
+.wrap { max-width: 68rem; margin: 0 auto; }
+header { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-block: 1.75rem; flex-wrap: wrap; }
+.mark { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; letter-spacing: 0.04em; }
+.domain { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--muted); letter-spacing: 0.04em; }
+main { padding-block: clamp(2.5rem, 8vw, 6rem) clamp(2rem, 5vw, 4rem); display: grid; gap: 2.5rem; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.8125rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: flex; align-items: center; gap: 0.6rem; }
+.eyebrow::before { content: ""; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--accent); }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.6rem, 8.5vw, 6.2rem); line-height: 0.98; letter-spacing: -0.025em; margin: 1rem 0 0; max-width: 14ch; text-wrap: balance; }
+.lede { max-width: 38rem; color: var(--muted); margin: 0; }
+.orbit { max-width: 38rem; border-top: 1px solid var(--line); padding-top: 1.25rem; display: grid; gap: 0.75rem; }
+.orbit-label { font-family: var(--font-mono); font-size: 0.8125rem; letter-spacing: 0.06em; color: var(--muted); display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.orbit-label b { font-weight: 400; color: var(--fg); font-variant-numeric: tabular-nums; }
+.track { height: 6px; background: var(--line); border-radius: 3px; position: relative; }
+.fill { position: absolute; inset: 0 auto 0 0; width: 80%; background: var(--accent); border-radius: 3px; }
+.fill::after { content: ""; position: absolute; right: -6px; top: 50%; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--bg); }
+.orbit p { margin: 0; font-size: 0.9375rem; color: var(--muted); }
+.strata { display: block; width: 100%; height: clamp(140px, 22vw, 260px); margin-top: 1rem; }
+.strata path { stroke: none; }
+.ground { background: var(--s4); padding-block: 1.25rem calc(1.25rem); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.ground .wrap { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.06em; color: #E9E4D2; }
+.bleed { margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px))); }
+.contact { display: grid; gap: 0.35rem; }
+.contact-label { font-family: var(--font-mono); font-size: 0.8125rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.mail { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.4rem, 4.5vw, 2.1rem); color: var(--fg); text-decoration: none; border-bottom: 2px solid var(--accent); width: fit-content; max-width: 100%; overflow-wrap: anywhere; user-select: all; }
+.mail:hover { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (prefers-reduced-motion: no-preference) {
+  h1, .lede, .orbit { animation: rise 0.7s ease both; }
+  .lede { animation-delay: 0.08s; }
+  .orbit { animation-delay: 0.16s; }
+  @keyframes rise { from { opacity: 0.001; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <span class="mark">iMRV</span>
+    <span class="domain">imrv.earth</span>
+  </header>
+  <main>
+    <div>
+      <div class="eyebrow">Opening soon</div>
+      <h1>Something is taking shape here.</h1>
+    </div>
+    <p class="lede">iMRV is getting ready to launch. The site is being built layer by layer, and this page holds the place until it is ready.</p>
+    <div class="orbit" aria-live="polite">
+      <div class="orbit-label"><span>Earth's orbit, <b id="yr">2026</b></span><b id="pct">80.0%</b></div>
+      <div class="track"><div class="fill" id="fill"></div></div>
+      <p id="note">Day 297 of 365 on the way around the sun.</p>
+    </div>
+    <div class="contact">
+      <span class="contact-label">Get in touch</span>
+      <a class="mail" href="mailto:info@imrv.earth" id="mail">info@imrv.earth</a>
+    </div>
+  </main>
+</div>
+
+<div class="bleed">
+  <svg class="strata" viewBox="0 0 1440 260" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path fill="var(--s1)" d="M0 70 C180 30 340 110 560 78 C780 46 960 20 1180 62 C1300 84 1380 60 1440 48 L1440 260 L0 260 Z"/>
+    <path fill="var(--s2)" d="M0 120 C220 90 360 150 600 128 C820 108 1000 84 1220 118 C1330 134 1400 120 1440 110 L1440 260 L0 260 Z"/>
+    <path fill="var(--s3)" d="M0 170 C200 150 380 196 620 176 C840 158 1020 140 1240 168 C1340 180 1400 172 1440 166 L1440 260 L0 260 Z"/>
+    <path fill="var(--s4)" d="M0 214 C240 200 400 232 640 220 C860 208 1040 196 1260 216 C1350 224 1410 220 1440 216 L1440 260 L0 260 Z"/>
+  </svg>
+  <div class="ground">
+    <div class="wrap"><span>iMRV</span><span>info@imrv.earth</span></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  try {
+    var now = new Date();
+    var y = now.getFullYear();
+    var start = new Date(y, 0, 1);
+    var days = (new Date(y + 1, 0, 1) - start) / 86400000;
+    var day = Math.floor((now - start) / 86400000) + 1;
+    var pct = ((now - start) / (days * 86400000)) * 100;
+    document.getElementById("yr").textContent = y;
+    document.getElementById("pct").textContent = pct.toFixed(1) + "%";
+    document.getElementById("fill").style.width = pct.toFixed(2) + "%";
+    document.getElementById("note").textContent = "Day " + day + " of " + days + " on the way around the sun.";
+  } catch (e) {}
+})();
+</script>
+
+</body>
+</html>
